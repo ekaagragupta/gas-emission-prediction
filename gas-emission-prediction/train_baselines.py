@@ -3,7 +3,26 @@ import numpy as np
 
 from src.feature_engineering import create_sequences
 from src.models.baseline_models import run_baseline_experiments
-from src.models.lstm_model import chronological_split
+
+def chronological_split(X, y, train_ratio=0.7, val_ratio=0.15):
+    """
+    Time-series safe split (no shuffling).
+    """
+
+    total = len(X)
+    train_end = int(total * train_ratio)
+    val_end = train_end + int(total * val_ratio)
+
+    X_train = X[:train_end]
+    y_train = y[:train_end]
+
+    X_val = X[train_end:val_end]
+    y_val = y[train_end:val_end]
+
+    X_test = X[val_end:]
+    y_test = y[val_end:]
+
+    return X_train, y_train, X_val, y_val, X_test, y_test
 
 data = pd.read_csv("data/processed/emissions_clean.csv")
 
