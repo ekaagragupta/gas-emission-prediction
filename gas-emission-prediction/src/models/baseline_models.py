@@ -1,17 +1,4 @@
-"""
-Baseline Models Module
-────────────────────────────────────────────
-Implements:
-1. Linear Regression
-2. Random Forest
-3. Basic 1-layer LSTM
 
-Includes:
-- Proper time-series handling
-- Sequence flattening for tabular models
-- Evaluation metrics (R2, MAE, RMSE, MAPE)
-- Optional inverse scaling for ppm metrics
-"""
 
 import logging
 from typing import Dict, Tuple
@@ -30,10 +17,8 @@ from tensorflow.keras.layers import LSTM, Dense
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-
-# ─────────────────────────────────────────────
 # METRIC CALCULATION
-# ─────────────────────────────────────────────
+
 
 def calculate_metrics(
     y_true: np.ndarray,
@@ -41,13 +26,6 @@ def calculate_metrics(
 ) -> Dict[str, float]:
     """
     Calculate evaluation metrics.
-
-    Args:
-        y_true: Ground truth values
-        y_pred: Model predictions
-
-    Returns:
-        Dictionary with metrics
     """
 
     r2 = r2_score(y_true, y_pred)
@@ -67,9 +45,8 @@ def calculate_metrics(
     }
 
 
-# ─────────────────────────────────────────────
 # FLATTEN SEQUENCES FOR TABULAR MODELS
-# ─────────────────────────────────────────────
+
 
 def flatten_sequences(X: np.ndarray) -> np.ndarray:
     """
@@ -81,9 +58,7 @@ def flatten_sequences(X: np.ndarray) -> np.ndarray:
     return X.reshape(X.shape[0], -1)
 
 
-# ─────────────────────────────────────────────
-# LINEAR REGRESSION
-# ─────────────────────────────────────────────
+#linear regression
 
 def train_linear_regression(
     X_train: np.ndarray,
@@ -96,10 +71,7 @@ def train_linear_regression(
     logger.info("Linear Regression trained.")
     return model
 
-
-# ─────────────────────────────────────────────
-# RANDOM FOREST
-# ─────────────────────────────────────────────
+#random forest
 
 def train_random_forest(
     X_train: np.ndarray,
@@ -119,9 +91,7 @@ def train_random_forest(
     return model
 
 
-# ─────────────────────────────────────────────
-# BASIC LSTM (Single Layer)
-# ─────────────────────────────────────────────
+#basic lstm model
 
 def build_basic_lstm(
     input_shape: Tuple[int, int]
@@ -145,9 +115,7 @@ def build_basic_lstm(
     return model
 
 
-# ─────────────────────────────────────────────
-# MAIN BASELINE EXPERIMENT RUNNER
-# ─────────────────────────────────────────────
+#main function to run all baseline experiments
 
 def run_baseline_experiments(
     X_train: np.ndarray,
@@ -165,16 +133,13 @@ def run_baseline_experiments(
     """
 
     results = []
-
-    # ─────────────────────────────
-    # Prepare flattened data
-    # ─────────────────────────────
+# Flatten sequences for tabular models
     X_train_flat = flatten_sequences(X_train)
     X_val_flat = flatten_sequences(X_val)
     X_test_flat = flatten_sequences(X_test)
 
     # ─────────────────────────────
-    # 1️⃣ Linear Regression
+    #  Linear Regression
     # ─────────────────────────────
     lr = train_linear_regression(X_train_flat, y_train)
     lr_pred = lr.predict(X_test_flat)
@@ -184,7 +149,7 @@ def run_baseline_experiments(
     results.append(lr_metrics)
 
     # ─────────────────────────────
-    # 2️⃣ Random Forest
+    # Random Forest
     # ─────────────────────────────
     rf = train_random_forest(X_train_flat, y_train)
     rf_pred = rf.predict(X_test_flat)
@@ -194,7 +159,7 @@ def run_baseline_experiments(
     results.append(rf_metrics)
 
     # ─────────────────────────────
-    # 3️⃣ Basic LSTM
+    #  Basic LSTM
     # ─────────────────────────────
     basic_lstm = build_basic_lstm(
         input_shape=(X_train.shape[1], X_train.shape[2])
@@ -216,9 +181,7 @@ def run_baseline_experiments(
     lstm_metrics["Model"] = "Basic LSTM"
     results.append(lstm_metrics)
 
-    # ─────────────────────────────
-    # Final Results
-    # ─────────────────────────────
+  # Convert results to DataFrame and sort by R2
     df_results = pd.DataFrame(results)
 
     df_results = df_results[
