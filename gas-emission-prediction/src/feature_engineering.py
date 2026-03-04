@@ -23,8 +23,8 @@ def create_time_features(df: pd.DataFrame) -> pd.DataFrame:
 
 def create_lag_features(df: pd.DataFrame) -> pd.DataFrame:
     for lag in [1, 7, 14, 30]:
-        df[f"CO2_lag_{lag}"] = df["CO2"].shift(lag)
-        df[f"NO2_lag_{lag}"] = df["NO2"].shift(lag)
+       df[f"AQI_lag_{lag}"] = df["AQI"].shift(lag)
+       df[f"NO2_lag_{lag}"] = df["NO2"].shift(lag)
     return df
 
 

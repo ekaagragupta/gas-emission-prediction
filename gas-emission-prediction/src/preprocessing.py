@@ -20,7 +20,7 @@ class EmissionPreprocessor:
     def handle_missing(self, df: pd.DataFrame) -> pd.DataFrame:
         df = df.sort_values("Date")
         df = df.drop(columns=["City", "AQI_Bucket"])
-        df = df.fillna(method="ffill", limit=6)
+        df = df.ffill(limit=6)
         df = df.interpolate(method="linear")
         return df
 
