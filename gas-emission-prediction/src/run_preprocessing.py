@@ -18,6 +18,7 @@ clean_df = preprocessor.preprocess(raw_data)
 clean_df = create_time_features(clean_df)
 clean_df = create_lag_features(clean_df)
 
+clean_df = clean_df.drop(columns=["Date"])
 clean_df = clean_df.dropna()
 
 
