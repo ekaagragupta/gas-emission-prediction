@@ -9,9 +9,9 @@ import keras
 def create_time_features(df: pd.DataFrame) -> pd.DataFrame:
     df["Date"] = pd.to_datetime(df["Date"])
 
-    df["hour"] = df["timestamp"].dt.hour
-    df["day_of_week"] = df["timestamp"].dt.dayofweek
-    df["day_of_year"] = df["timestamp"].dt.dayofyear
+    df["hour"] = df["Date"].dt.hour
+    df["day_of_week"] = df["Date"].dt.dayofweek
+    df["day_of_year"] = df["Date"].dt.dayofyear
 
     df["hour_sin"] = np.sin(2 * np.pi * df["hour"] / 24)
     df["hour_cos"] = np.cos(2 * np.pi * df["hour"] / 24)

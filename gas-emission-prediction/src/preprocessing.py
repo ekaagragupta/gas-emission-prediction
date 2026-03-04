@@ -19,6 +19,7 @@ class EmissionPreprocessor:
 
     def handle_missing(self, df: pd.DataFrame) -> pd.DataFrame:
         df = df.sort_values("Date")
+        df = df.drop(columns=["City", "AQI_Bucket"])
         df = df.fillna(method="ffill", limit=6)
         df = df.interpolate(method="linear")
         return df
@@ -40,7 +41,8 @@ class EmissionPreprocessor:
         return df
 
     def preprocess(self, df: pd.DataFrame) -> pd.DataFrame:
-
+        
+        df["Date"] = pd.to_datetime(df["Date"])
         df = self.remove_duplicates(df)
         df = self.handle_missing(df)
 
