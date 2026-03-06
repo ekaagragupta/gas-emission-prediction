@@ -1,7 +1,7 @@
 
 # GETHER
 
-### Generative AI-driven Emission Temporal Hybrid Explainable Regressor
+###  Emission Temporal Hybrid Explainable Regressor
 
 A human-centered AI system for **air pollution understanding, forecasting, and policy simulation**.
 GETHER combines **temporal deep learning, causal discovery, counterfactual reasoning, and explainable AI** to help researchers, policymakers, and the public understand how emissions affect **AQI (Air Quality Index)** and what interventions could improve it.
