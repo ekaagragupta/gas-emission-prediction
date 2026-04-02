@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 from typing import Tuple
 
-
 def create_time_features(df: pd.DataFrame) -> pd.DataFrame:
     df["Date"] = pd.to_datetime(df["Date"])
 
@@ -20,13 +19,11 @@ def create_time_features(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
-
 def create_lag_features(df: pd.DataFrame) -> pd.DataFrame:
     for lag in [1, 7, 14, 30]:
        df[f"AQI_lag_{lag}"] = df["AQI"].shift(lag)
        df[f"NO2_lag_{lag}"] = df["NO2"].shift(lag)
     return df
-
 
 def create_sequences(
     data: np.ndarray,

@@ -310,10 +310,6 @@ class AQIExplainer:
         plt.show()
         return fig
 
-
-# ─────────────────────────────────────────────
-# Convenience runner
-# ─────────────────────────────────────────────
 def run_explainability(
     seq_len:      int  = 30,
     n_background: int  = 100,
