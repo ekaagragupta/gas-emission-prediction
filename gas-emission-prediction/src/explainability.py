@@ -354,7 +354,7 @@ def run_explainability(
     # ── Summary plot ───────────────────────────────────────────────────────
     explainer.plot_shap_summary(save=save_plots)
 
-    # ── Local explanation ──────────────────────────────────────────────────
+    # ── explanation for one sample ───────────────────────────────────────────────
     print(f"\n── Local Explanation  (sample #{local_sample}) ──────────────")
     df_local = explainer.local_explanation(local_sample)
     print(df_local.head(10).to_string(index=False))
