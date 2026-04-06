@@ -374,10 +374,6 @@ def run_explainability(
     print("\n[Done] Explainability module completed successfully.")
     return explainer
 
-
-# ─────────────────────────────────────────────
-# Entry point
-# ─────────────────────────────────────────────
 if __name__ == "__main__":
     run_explainability(
         seq_len=30,
