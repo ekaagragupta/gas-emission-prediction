@@ -20,10 +20,12 @@ warnings.filterwarnings("ignore")
 # ─────────────────────────────────────────────
 # Paths (relative to project root)
 # ─────────────────────────────────────────────
-MODEL_PATH   = os.path.join("models", "aqi_lstm_model.h5")
-SCALER_PATH  = os.path.join("models", "scaler.pkl")
-DATA_PATH    = os.path.join("data", "processed", "emissions_clean.csv")
-OUTPUT_DIR   = os.path.join("outputs", "explainability")
+# Get the directory of the gas-emission-prediction folder (parent of src)
+PROJECT_DIR  = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODEL_PATH   = os.path.join(PROJECT_DIR, "models", "aqi_lstm_model.h5")
+SCALER_PATH  = os.path.join(PROJECT_DIR, "models", "scaler.pkl")
+DATA_PATH    = os.path.join(PROJECT_DIR, "data", "processed", "emissions_clean.csv")
+OUTPUT_DIR   = os.path.join(PROJECT_DIR, "outputs", "explainability")
 
 
 # ─────────────────────────────────────────────
@@ -32,7 +34,8 @@ OUTPUT_DIR   = os.path.join("outputs", "explainability")
 def _load_model():
     """Load the trained Keras LSTM model."""
     from tensorflow import keras  # lazy import keeps module light
-    model = keras.models.load_model(MODEL_PATH)
+    # Load without compiling to avoid version mismatch issues with old models
+    model = keras.models.load_model(MODEL_PATH, compile=False)
     return model
 
 
@@ -42,7 +45,7 @@ def _load_scaler():
 
 
 def _load_data():
-    return pd.read_csv(DATA_PATH, parse_dates=["Date"])
+    return pd.read_csv(DATA_PATH)
 
 
 # ─────────────────────────────────────────────
@@ -51,21 +54,23 @@ def _load_data():
 def _build_sequences(df: pd.DataFrame, seq_len: int = 30):
     """
     Re-create LSTM input sequences from the processed dataframe.
-    Target column: AQI.  Feature columns: everything else (non-Date).
+    Mirrors train_lstm.py: prepend AQI to feature columns to match model training.
+    Target column: AQI.  Feature columns: everything except Date.
     Returns X (3-D), y (1-D), feature_names (list).
     """
-    feature_cols = [c for c in df.columns if c not in ("Date", "AQI")]
     target_col   = "AQI"
-
-    data_X = df[feature_cols].values
-    data_y = df[target_col].values
-
+    feature_cols = [c for c in df.columns if c not in ("Date", "AQI")]
+    
+    # Match train_lstm.py: column_stack(y, X) adds AQI as first column
+    all_cols = [target_col] + feature_cols
+    data = df[all_cols].values
+    
     X, y = [], []
-    for i in range(seq_len, len(data_X)):
-        X.append(data_X[i - seq_len: i])   # (seq_len, n_features)
-        y.append(data_y[i])
+    for i in range(seq_len, len(data)):
+        X.append(data[i - seq_len: i])   # (seq_len, n_features) — includes AQI
+        y.append(data[i, 0])  # AQI is first column
 
-    return np.array(X), np.array(y), feature_cols
+    return np.array(X), np.array(y), all_cols
 
 
 # ─────────────────────────────────────────────
