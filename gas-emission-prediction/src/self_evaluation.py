@@ -20,7 +20,7 @@ class UncertaintyEstimator:
     def __init__(self, seq_len=30):
 
         print("Loading trained model...")
-        self.model = tf.keras.models.load_model(MODEL_PATH)
+        self.model = tf.keras.models.load_model(MODEL_PATH, compile=False)
 
         print("Loading dataset...")
         self.df = pd.read_csv(DATA_PATH)
