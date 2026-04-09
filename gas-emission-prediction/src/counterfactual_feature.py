@@ -4,10 +4,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from tensorflow import keras
 
-
-# ─────────────────────────────────────────────
-# Project paths
-# ─────────────────────────────────────────────
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 MODEL_PATH = os.path.join(PROJECT_DIR, "models", "aqi_lstm_model.h5")
