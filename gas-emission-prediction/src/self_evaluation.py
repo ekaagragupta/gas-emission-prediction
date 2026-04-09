@@ -48,9 +48,8 @@ class UncertaintyEstimator:
         return np.array(X)
 
 
-    # ------------------------------
     # Monte Carlo Dropout Prediction
-    # ------------------------------
+
     def mc_dropout_prediction(self, X, n_samples=50):
 
         predictions = []
